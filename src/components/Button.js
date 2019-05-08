@@ -9,7 +9,7 @@ const Button = styled.button`
   padding: 20px;
   display: inline-block;
 
-  width: ${props => props.fullWidth ? '100%' : 'auto'}
+  width: ${props => props.fullWidth ? '100%' : 'auto'};
 
   position: relative;
 
@@ -23,11 +23,11 @@ const Button = styled.button`
 
   margin: 10px ${outlineWidth}px;
 
-  background: ${props => props.backgroundColor}
+  background: ${props => props.backgroundColor};
   box-shadow: inset -${shadowWidth}px -${shadowWidth}px 0px 0px ${props => props.borderColor};
 
   &:hover, &:focus {
-    background: ${props => props.backgroundColorHover}
+    background: ${props => props.backgroundColorHover};
     box-shadow: inset -${shadowWidth * 1.5}px -${shadowWidth * 1.5}px 0px 0px ${props => props.borderColor};
   }
 
@@ -61,8 +61,8 @@ const Button = styled.button`
 Button.defaultProps = {
   borderColor: '#084bd6',
 
-  backgroundColor: '#1981D4',
-  backgroundColorHover: '#1470C0'
+  backgroundColor: '#1981d4',
+  backgroundColorHover: '#1470c0'
 }
 
 Button.propTypes = {

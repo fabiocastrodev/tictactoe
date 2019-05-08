@@ -18,4 +18,4 @@ const audioSrc = require('./assets/music.mp3')
 const audio = new Audio(audioSrc)
 
 audio.pause()
-audio.play()
+// audio.play()

@@ -6,10 +6,11 @@ import Button from '../../../components/Button'
 
 import { SharedElement } from '@taito/react-sheltr'
 
+import { auth } from 'firebase'
 import firebase from '../../../modules/firebase'
 import { useAuthState } from 'react-firebase-hooks/auth'
 
-const logoImage = require('../assets/tw-logo.svg')
+const logoImage = require('../../../assets/tw-logo.svg')
 const backgroundImage = require('../../../assets/background.svg')
 
 const crossImage = require('../../../assets/cross.svg')
@@ -29,6 +30,38 @@ function Home(props) {
   const loginAnonymously = async () => {
     try {
       await firebase.auth().signInAnonymously()
+    } catch (e) {
+      alert(e.message)
+    }
+  }
+
+  const loginWithFB = async () => {
+    const provider = new auth.FacebookAuthProvider()
+
+    firebase.auth().languageCode = 'pt_BR'
+
+    provider.setCustomParameters({
+      display: 'popup'
+    })
+
+    try {
+      await firebase.auth().signInWithPopup(provider)
+    } catch (e) {
+      alert(e.message)
+    }
+  }
+
+  const loginWithGoogle = async () => {
+    const provider = new auth.GoogleAuthProvider()
+
+    firebase.auth().languageCode = 'pt_BR'
+
+    provider.setCustomParameters({
+      display: 'popup'
+    })
+
+    try {
+      await firebase.auth().signInWithPopup(provider)
     } catch (e) {
       alert(e.message)
     }
@@ -68,7 +101,7 @@ function Home(props) {
             backgroundColor="#1981d4"
             backgroundColorHover="#1470c0"
 
-            onClick={navigate}
+            onClick={loginWithFB}
           >
             Entrar com Facebook
           </Button>
@@ -79,7 +112,7 @@ function Home(props) {
             backgroundColor="#e25c4d"
             backgroundColorHover="#dd4b39"
 
-            onClick={navigate}
+            onClick={loginWithGoogle}
           >
             Entrar com Google
           </Button>
@@ -171,7 +204,7 @@ const ActionsWrapper = styled.div`
 
 const Title = styled.h1`
   font-size: 50px;
-  text-shadow: 0px 2px #03FFFF;
+  text-shadow: 0px 2px ${props => props.theme.shadow};
 
   animation: ${blink} 0.7s steps(5, start) infinite;
 `
@@ -192,8 +225,8 @@ const Divider = styled.div`
 
   margin: 10px 0;
 
-  background-color: #0D1140;
-  box-shadow: 0px 2px #03FFFF;
+  background-color: ${props => props.theme.dark};
+  box-shadow: 0px 2px ${props => props.theme.shadow};
 `
 
 const Actions = styled.div`

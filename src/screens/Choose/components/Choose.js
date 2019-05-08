@@ -1,6 +1,6 @@
 import React from 'react'
 
-import styled, { keyframes } from 'styled-components'
+import styled from 'styled-components'
 
 import { SharedElement } from '@taito/react-sheltr'
 
@@ -8,16 +8,19 @@ import firebase from '../../../modules/firebase'
 import { useAuthState } from 'react-firebase-hooks/auth'
 
 import Button from '../../../components/Button'
+import Logout from '../../../components/Logout'
+import Title from '../../../components/Title'
 
 const heartSymbol = require('../../../assets/heart-symbol.svg')
 const keySymbol = require('../../../assets/key-symbol.svg')
 const playSymbol = require('../../../assets/play-symbol.svg')
 
 const backgroundImage = require('../../../assets/background.svg')
-const borderBottomRightImage = require('../../../assets/border-bottom-right.svg')
 
 function Choose(props) {
-  const { initialising, user } = useAuthState(firebase.auth())
+  const { history } = props
+
+  const { user } = useAuthState(firebase.auth())
   
   let displayName = ''
   if (user) {
@@ -39,10 +42,9 @@ function Choose(props) {
 
       <ContentWrapper>
         <div>
-          <MessageWraper className={user ? 'animate' : ''}>
-            <span className="name">Olá, {displayName}</span>
-            <span className="choose">Escolha como começar:</span>
-          </MessageWraper>
+          <AnimatedTitle description="Escolha como começar:" className={user && 'show'}>
+            Olá, {displayName}
+          </AnimatedTitle>
 
           <div>
             <ActionButton
@@ -53,7 +55,7 @@ function Choose(props) {
 
               fullWidth
             >
-              <img src={heartSymbol} />
+              <img src={heartSymbol} alt="heart" />
               Jogar agora
             </ActionButton>
 
@@ -61,30 +63,34 @@ function Choose(props) {
               borderColor="#084bd6"
 
               backgroundColor="#1981d4"
-              backgroundColorHover="#1470c0"
+              backgroundColorHover="#1270c0"
 
               fullWidth
+
+              onClick={() => history.push('/create-room')}
             >
-              <img src={keySymbol} />
+              <img src={keySymbol} alt="key" />
               Criar partida
             </ActionButton>
 
             <ActionButton
-              borderColor="#f7206b"
+              borderColor="#d007e6"
 
-              backgroundColor="#dd2767"
-              backgroundColorHover="#fd2f77"
+              backgroundColor="#d447e6"
+              backgroundColorHover="#d727e6"
 
               fullWidth
+
+              onClick={() => history.push('/enter-room')}
             >
-              <img src={playSymbol} />
+              <img src={playSymbol} alt="play" />
               Entrar em uma partida
             </ActionButton>
           </div>
         </div>
       </ContentWrapper>
 
-      <BorderBottomRightImage src={borderBottomRightImage} />
+      <Logout />
     </Wrapper>
   )
 }
@@ -125,63 +131,16 @@ const ContentWrapper = styled.div`
   padding: 40px 80px;
 `
 
-const showMessage = keyframes`
-  from {
-    transform: translateY(-200%);
-  }
+const AnimatedTitle = styled(Title)` 
+  visibility: hidden;
 
-  to {
+  transform: translateY(-200%);
+  transition: transform 1s steps(5, start);
+
+  &.show {
+    visibility: visible;
     transform: translateY(0%);
   }
-`
-
-const MessageWraper = styled.div`
-  & .name {
-    display: block;
-    margin-bottom: 10px;
-
-    font-size: 14px;
-  }
-
-  & .choose {
-    display: block;
-
-    font-size: 18px;
-  }
-
-  visibility: hidden;
-  
-  &.animate {
-    visibility: visible;
-    animation: ${showMessage} 1s steps(5, start) 1;
-  }
-
-  margin-bottom: 20px;
-`
-
-const showBorderBottomRight = keyframes`
-  from {
-    transform: translate(100%)
-  }
-
-  to {
-    transform: translate(0%)
-  }
-`
-
-const BorderBottomRightImage = styled.img`
-  position: absolute;
-
-  right: 0;
-  bottom: 0;
-
-  width: 10%;
-
-  @media (min-width: 700px) {
-    width: 200px;
-  }
-
-  animation: ${showBorderBottomRight} 0.7s steps(5, start) 1;
 `
 
 const ActionButton = styled(Button)`
@@ -189,7 +148,10 @@ const ActionButton = styled(Button)`
   align-items: center;
   justify-content: flex-start;
 
+  margin-bottom: 30px;
+
   img {
+    width: 40px;
     height: 30px;
     margin-right: 10px;
   }
